@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>QVAS Display</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Arial,Helvetica,sans-serif;overflow:hidden}
+  .display{height:100%;display:flex;align-items:center;white-space:nowrap;font-size:clamp(42px,12vw,110px);font-weight:700;letter-spacing:.02em}
+  #text{padding-left:100vw;animation:scroll 14s linear infinite}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-200%)}}
+</style>
+</head>
+<body>
+  <div class="display"><div id="text">Ready</div></div>
+<script>
+const text = document.getElementById('text');
+function setText(value){
+  if (typeof value === 'object' && value) {
+    if (value.type === 'RESET') value = 'Ready';
+    else if (value.type === 'STOP') value = '';
+    else value = value.text || value.station || 'Ready';
+  }
+  text.textContent = String(value || '');
+  text.style.animation = 'none';
+  void text.offsetWidth;
+  text.style.animation = 'scroll 14s linear infinite';
+}
+window.addEventListener('message', e => setText(e.data));
+</script>
+</body>
+</html>
